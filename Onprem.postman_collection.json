@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "bb70cd16-3e47-42af-a844-8a8393e71cfd",
+		"name": "Onprem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Kakfa Connectors",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"name\": \"test-connector\",\n   \"config\": {\n    \"connector.class\": \"io.confluent.connect.elasticsearch.ElasticsearchSinkConnector\",\n    \"tasks.max\": \"1\",\n    \"topics\": \"test-topic\",\n    \"schema.ignore\": \"true\",\n    \"key.ignore\": \"true\",\n    \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n    \"value.converter.schemas.enable\": \"false\",\n    \"connection.url\": \"http://192.168.68.113:9200\",\n    \"type.name\": \"test-type\",\n    \"name\": \"test-connector\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Consumer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/vnd.kafka.v2+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"my_consumer\",\n  \"format\": \"json\",\n  \"auto.offset.reset\": \"earliest\",\n  \"auto.commit.enable\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/consumers/my-topic-consumer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"consumers",
+						"my-topic-consumer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/vnd.kafka.v2+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n  \"topics\": [\n    \"rest-topic\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/consumers/connect-test-connector/instances/my_consumer/subscription",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"consumers",
+						"connect-test-connector",
+						"instances",
+						"my_consumer",
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRecords",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/vnd.kafka.json.v2+json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/vnd.kafka.json.v2+json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/consumers/resttestgroup/instances/rest-topic-test-consumer/records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"consumers",
+						"resttestgroup",
+						"instances",
+						"rest-topic-test-consumer",
+						"records"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
